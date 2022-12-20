@@ -315,11 +315,9 @@ bool charizardStatus() {
 		return  true;
 	}
 }
-int mkHpMinus1DMG() {
-	return magikarpHp - charizardDMG;
-}
-int mkHpMinus2DMG() {
-	return magikarpHp - venasaurDMG;
+int mkHP(int enemyAttack, int heroHP){
+	magikarpHp = heroHP - enemyAttack;
+	return magikarpHp;
 }
 bool logros() {
 	if (teamRocket == true)
@@ -356,16 +354,16 @@ int main()
 		if (venasaurStatus())
 		{ 
 			// Ataco al MK
-			magikarpHp = mkHpMinus2DMG();
+			magikarpHp = mkHp( venasaurHP, magikarpHp);
 			magikarpIsAlive = checkMagikarpStatus1();
-		}
+		
 		// Charizard
 		//charizardIsAlive = charizardStatus();
 
 		if (charizardStatus())
 		{
 			// Ataco al MK
-			magikarpHp = mkHpMinus1DMG();
+			magikarpHp = mkHp(charizardDMG, magikarpHp);
 			magikarpIsAlive = checkMagikarpStatus2();
 		}
 	}
