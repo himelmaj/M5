@@ -69,15 +69,11 @@ void turnGame()
 	cout << " ######################################################\n\n";
 	t++;
 }
-int enemy1DMG()
+void enemyDMG(int enemyPokemonDMG)
 {
 	srand(time(NULL));
-	return 1 + rand() % 100;
+	enemyPokemonDMG = 1 + rand() % 100;
 	 
-}
-int enemy2DMG()
-{
-	return 1 + rand() % 100;
 }
 void opcionAttackSelect()
 {
@@ -127,6 +123,9 @@ void opcionAttackSelect()
 		}
 	} while (opcionDanoMK != 1 && opcionDanoMK != 2 && opcionDanoMK != 3 && opcionDanoMK != 4);
 }
+void pokemonHP( int meHP, int enemyDMG){
+	meHP = meHP - enemyDMG;
+}
 int opcionToAttackSelect() {
 	do
 	{
@@ -150,22 +149,22 @@ int opcionToAttackSelect() {
 		{
 			if (venasaurIsAlive == true)
 			{
-				venasaurHP = venasaurHP - dmgMK;
+				venasaurHP = pokemonHP( venasaurHP, dmgMK);
 			}
 			else
 			{
-				charizardHP = charizardHP - dmgMK;
+				charizardHP = pokemonHP( charizardHP, dmgMK);
 			}
 		}
 		else if (opcionToAttack == 2)
 		{
 			if (charizardIsAlive == true)
 			{
-				charizardHP = charizardHP - dmgMK;
+				charizardHP = pokemonHP( charizardHP, dmgMK);
 			}
 			else
 			{
-				venasaurHP = venasaurHP - dmgMK;
+				venasaurHP = pokemonHP( venasaurHP, dmgMK);
 			}
 		}
 		else
@@ -315,10 +314,6 @@ bool charizardStatus() {
 		return  true;
 	}
 }
-int mkHP(int enemyAttack, int heroHP){
-	magikarpHp = heroHP - enemyAttack;
-	return magikarpHp;
-}
 bool logros() {
 	if (teamRocket == true)
 	{
@@ -337,33 +332,19 @@ int main()
 	while ((venasaurIsAlive == true || charizardIsAlive == true) && magikarpIsAlive == true)
 	{
 		turnGame();
-		// Daño charizard
-		charizardDMG = enemy1DMG();
-		// Daño venasaur
-		venasaurDMG = enemy2DMG();
-		// ELIGE QUE ATAQUE  USAR VOID
+		enemyDMG(venasaurDMG);
+		enemyDMG(charizardDMG);
 		opcionAttackSelect();
-		// ElIGE A QUIEN ATACAR
 		opcionToAttackSelect();
-		// si vuelves a atacar al 1 si esta muerto [Venasaur], si vuelves a atacar al 2 si esta muerto [Charizard]
-		venasaurIsDeath();//VOID
-		charizardIsDeath();//VOID
-		// Venasaur
-		//venasaurIsAlive = venasaurStatus();
-
+		venasaurIsDeath();
+		charizardIsDeath();
 		if (venasaurStatus())
-		{ 
-			// Ataco al MK
-			magikarpHp = mkHp( venasaurHP, magikarpHp);
+		{
+			magikarpHp = pokemonHP(magikarpHp, venasaurDMG);
 			magikarpIsAlive = checkMagikarpStatus1();
-		
-		// Charizard
-		//charizardIsAlive = charizardStatus();
-
 		if (charizardStatus())
 		{
-			// Ataco al MK
-			magikarpHp = mkHp(charizardDMG, magikarpHp);
+			magikarpHp = pokemonHP(magikarpHp, charizardDMG);
 			magikarpIsAlive = checkMagikarpStatus2();
 		}
 	}
